@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Historial de Equipos</title>
+  <!-- Flatpickr CSS + tema (al inicio del <head>) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/material_blue.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+  <h2>Crear Nuevo Equipo</h2>
+  <div class="crear-equipo">
+    <div class="campo">
+      <label for="nuevoNombre">Nombre del equipo:</label><br />
+      <input type="text" id="nuevoNombre" />
+    </div>
+  
+    <div class="campo">
+      <label for="nuevoDestinado">Destinado a:</label><br />
+      <input type="text" id="nuevoDestinado" />
+    </div>
+  
+    <div class="boton-centrado">
+      <button id="crearEquipoBtn">Crear Equipo</button>
+    </div>
+  </div>
+  
+  
+
+
+  <hr />
+
+
+  <h1>Observacion ocular de Equipos</h1>
+
+  <div class="equipo-contenedor">
+    <label for="equipoSelect">Selecciona Equipo:</label><br />
+    <div class="equipo-row">
+      <select id="equipoSelect"></select>
+      <button id="eliminarEquipoBtn" style="color: red;">Eliminar Equipo</button>
+    </div>
+  </div>
+  
+  <label for="fechaInput">Selecciona Fecha:</label><br />
+  <input type="text" id="fechaInput" placeholder="Selecciona una fecha" /><br />
+
+  
+
+  <table>
+    <thead>
+      <tr>
+        <th>Limpieza</th>
+        <th>Conexiones</th>
+        <th>Verificación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" id="limpiezaChk" /></td>
+        <td><input type="checkbox" id="conexionesChk" /></td>
+        <td><input type="checkbox" id="verificacionChk" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <label for="observaciones">Observaciones:</label><br />
+  <textarea id="observaciones" rows="4" cols="50"></textarea><br />
+
+  <button id="guardarBtn">Guardar Estado</button>
+  <button id="eliminarMantencionBtn" style="margin-left:10px; color:red; display:none;">Eliminar Mantención</button>
+
+  <hr />
+
+  <h1>Mantencion trimestral de Equipos</h1>  
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mantencion</th>
+        <th>estado componentes</th>
+        <th>Cambio pasta termica</th>
+        <th>Funcionamiento del equipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" id="mantencionChk" /></td>
+        <td><input type="checkbox" id="estado_componentesChk" /></td>
+        <td><input type="checkbox" id="cambio_pastaChk" /></td>
+        <td><input type="checkbox" id="funcionamientoChk" /></td>
+      </tr>
+    </tbody>
+  </table>
+  <label for="observacionesTrimestral">Observaciones:</label><br />
+  <textarea id="observacionesTrimestral" rows="4" cols="50"></textarea><br />
+
+  <!-- Botón nuevo para semanal -->
+  <button id="guardarMantencionSemanalBtn">Guardar Mantención Semanal</button>
+
+  <button id="eliminarMantencionSemanalBtn" style="margin-left:10px; color:red; display:none;">Eliminar Mantención</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+  <script type="module" src="script.js"></script>
+
+
+</body>
+</html>
