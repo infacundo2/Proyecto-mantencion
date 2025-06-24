@@ -15,11 +15,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   password: '', // Cambia si tienes contraseña
 //   database: 'gestion_equipos',
 // });
+// const db = mysql.createConnection({
+//     host: '190.107.177.243',
+//     user: 'cja63651_cja63651',
+//     password: 'Pesso@01', // Cambia si tienes contraseña
+//     database: 'cja63651_Checklist_Base',
+//   });
+
 const db = mysql.createConnection({
-    host: '190.107.177.243',
-    user: 'cja63651_cja63651',
-    password: 'Pesso@01', // Cambia si tienes contraseña
-    database: 'cja63651_Checklist_Base',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
   });
 
 db.connect(err => {
