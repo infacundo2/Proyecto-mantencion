@@ -4,8 +4,8 @@ import { zunchadoraSelect } from './zunchadoras.js';
 export const fechaZunchadora = document.getElementById('fechaZunchadora');
 export const mantencionZunChk = document.getElementById('mantencionZunChk');
 export const estadoComponentesZunChk = document.getElementById('estadoComponentesZunChk');
-export const limpiezaChk = document.getElementById('limpiezaZunChk');
-export const funcionamientoChk = document.getElementById('funcionamientoZunChk');
+export const limpiezaZunChk = document.getElementById('limpiezaZunChk');
+export const funcionamientoZunChk = document.getElementById('funcionamientoZunChk');
 export const observacionesZunchadora = document.getElementById('observacionesZunchadora');
 export const eliminarMantencionZunchadoraBtn = document.getElementById('eliminarMantencionZunchadoraBtn');
 
@@ -16,8 +16,8 @@ export async function cargarEstadoZunchadora() {
   if (!zunchadora_id || !fecha) {
     mantencionZunChk.checked = false;
     estadoComponentesZunChk.checked = false;
-    limpiezaChk.checked = false;
-    funcionamientoChk.checked = false;
+    limpiezaZunChk.checked = false;
+    funcionamientoZunChk.checked = false;
     observacionesZunchadora.value = '';
     eliminarMantencionZunchadoraBtn.style.display = 'none';
     return;
@@ -29,16 +29,16 @@ export async function cargarEstadoZunchadora() {
   if (estado) {
     mantencionZunChk.checked = !!estado.mantencion;
     estadoComponentesZunChk.checked = !!estado.estado_componentes;
-    limpiezaChk.checked = !!estado.Limpieza;
-    funcionamientoChk.checked = !!estado.funcionamiento_equipo;
+    limpiezaZunChk.checked = !!estado.Limpieza;
+    funcionamientoZunChk.checked = !!estado.funcionamiento_equipo;
     observacionesZunchadora.value = estado.observaciones || '';
     eliminarMantencionZunchadoraBtn.style.display = 'inline';
     eliminarMantencionZunchadoraBtn.dataset.mantencionId = estado.id;
   } else {
     mantencionZunChk.checked = false;
     estadoComponentesZunChk.checked = false;
-    limpiezaChk.checked = false;
-    funcionamientoChk.checked = false;
+    limpiezaZunChk.checked = false;
+    funcionamientoZunChk.checked = false;
     observacionesZunchadora.value = '';
     eliminarMantencionZunchadoraBtn.style.display = 'none';
     eliminarMantencionZunchadoraBtn.dataset.mantencionId = '';
