@@ -2,8 +2,8 @@
 import { zunchadoraSelect } from './zunchadoras.js';
 
 export const fechaInput = document.getElementById('fechaZunchadora');
-export const mantencionChk = document.getElementById('mantencionZunChk');
-export const estadoComponentesChk = document.getElementById('estadoComponentesZunChk');
+export const mantencionZunChk = document.getElementById('mantencionZunChk');
+export const estadoComponentesZunChk = document.getElementById('estadoComponentesZunChk');
 export const limpiezaChk = document.getElementById('limpiezaZunChk');
 export const funcionamientoChk = document.getElementById('funcionamientoZunChk');
 export const observacionesZunchadora = document.getElementById('observacionesZunchadora');
@@ -14,8 +14,8 @@ export async function cargarEstadoZunchadora() {
   const fecha = fechaInput.value;
 
   if (!zunchadora_id || !fecha) {
-    mantencionChk.checked = false;
-    estadoComponentesChk.checked = false;
+    mantencionZunChk.checked = false;
+    estadoComponentesZunChk.checked = false;
     limpiezaChk.checked = false;
     funcionamientoChk.checked = false;
     observacionesZunchadora.value = '';
@@ -27,16 +27,16 @@ export async function cargarEstadoZunchadora() {
   const estado = await res.json();
 
   if (estado) {
-    mantencionChk.checked = !!estado.mantencion;
-    estadoComponentesChk.checked = !!estado.estado_componentes;
+    mantencionZunChk.checked = !!estado.mantencion;
+    estadoComponentesZunChk.checked = !!estado.estado_componentes;
     limpiezaChk.checked = !!estado.Limpieza;
     funcionamientoChk.checked = !!estado.funcionamiento_equipo;
     observacionesZunchadora.value = estado.observaciones || '';
     eliminarMantencionZunchadoraBtn.style.display = 'inline';
     eliminarMantencionZunchadoraBtn.dataset.mantencionId = estado.id;
   } else {
-    mantencionChk.checked = false;
-    estadoComponentesChk.checked = false;
+    mantencionZunChk.checked = false;
+    estadoComponentesZunChk.checked = false;
     limpiezaChk.checked = false;
     funcionamientoChk.checked = false;
     observacionesZunchadora.value = '';
