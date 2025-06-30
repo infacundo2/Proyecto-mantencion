@@ -26,8 +26,7 @@ import { zunchadoraSelect,
          funcionamientoZunChk,
          observacionesZunchadora, 
          eliminarMantencionZunchadoraBtn,
-         cargarEstadoZunchadora,
-         actualizarFechasZunchadoras} from './mantenimiento_zunchadoras.js';
+         cargarEstadoZunchadora} from './mantenimiento_zunchadoras.js';
 
 
 // Importar idioma español para flatpickr
@@ -352,7 +351,7 @@ eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
 zunchadoraSelect?.addEventListener('change', () => {
   cargarEstadoZunchadora();
   actualizarFechasZunchadoras();
-});
+}); 
 
 // Eventos al cambiar selección
 equipoSelect.addEventListener('change', () => {
