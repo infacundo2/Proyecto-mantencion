@@ -279,7 +279,7 @@ app.post('/zunchadoras', (req, res) => {
   if (!numero_zunchadora) return res.status(400).json({ error: 'Falta número de zunchadora' });
 
   db.query(
-    'INSERT INTO zunchadoras (`Numero zunchadora`) VALUES (?)',
+    'INSERT INTO zunchadoras (`numero_zunchadora`) VALUES (?)',
     [numero_zunchadora],
     (err, result) => {
       if (err) return res.status(500).json({ error: err.message });
