@@ -1,7 +1,7 @@
 // mantenimiento_zunchadoras.js
 import { zunchadoraSelect } from './zunchadoras.js';
 
-export const fechaInput = document.getElementById('fechaZunchadora');
+export const fechaZunchadora = document.getElementById('fechaZunchadora');
 export const mantencionZunChk = document.getElementById('mantencionZunChk');
 export const estadoComponentesZunChk = document.getElementById('estadoComponentesZunChk');
 export const limpiezaChk = document.getElementById('limpiezaZunChk');
@@ -11,7 +11,7 @@ export const eliminarMantencionZunchadoraBtn = document.getElementById('eliminar
 
 export async function cargarEstadoZunchadora() {
   const zunchadora_id = zunchadoraSelect.value;
-  const fecha = fechaInput.value;
+  const fecha = fechaZunchadora.value;
 
   if (!zunchadora_id || !fecha) {
     mantencionZunChk.checked = false;
