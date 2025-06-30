@@ -8,19 +8,6 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Conexión a MySQL local
-// const db = mysql.createConnection({
-//   host: 'localhost',
-//   user: 'root',
-//   password: '', // Cambia si tienes contraseña
-//   database: 'gestion_equipos',
-// });
-// const db = mysql.createConnection({
-//     host: '190.107.177.243',
-//     user: 'cja63651_cja63651',
-//     password: 'Pesso@01', // Cambia si tienes contraseña
-//     database: 'cja63651_Checklist_Base',
-//   });
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -276,6 +263,135 @@ app.delete('/equipos/:id', (req, res) => {
     });
   });
   
+//  ZUNCHADORAS             
+
+// Obtener lista de zunchadoras
+app.get('/zunchadoras', (req, res) => {
+  db.query('SELECT * FROM zunchadoras', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+// Crear nueva zunchadora
+app.post('/zunchadoras', (req, res) => {
+  const { numero_zunchadora } = req.body;
+  if (!numero_zunchadora) return res.status(400).json({ error: 'Falta número de zunchadora' });
+
+  db.query(
+    'INSERT INTO zunchadoras (`Numero zunchadora`) VALUES (?)',
+    [numero_zunchadora],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json({ id: result.insertId, message: 'Zunchadora creada' });
+    }
+  );
+});
+
+// Eliminar zunchadora
+app.delete('/zunchadoras/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM zunchadoras WHERE id = ?', [id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Zunchadora no encontrada' });
+    res.json({ message: 'Zunchadora eliminada' });
+  });
+});
+
+// Obtener estado de zunchadora por fecha
+app.get('/estado_zunchadora', (req, res) => {
+  const { zunchadora_id, fecha } = req.query;
+  if (!zunchadora_id || !fecha) {
+    return res.status(400).json({ error: 'Faltan parámetros zunchadora_id o fecha' });
+  }
+
+  db.query(
+    'SELECT * FROM mantenimiento_zunchadoras WHERE zunchadora_id = ? AND fecha = ?',
+    [zunchadora_id, fecha],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(results[0] || null);
+    }
+  );
+});
+
+// Guardar o actualizar mantención de zunchadora
+app.post('/estado_zunchadora', (req, res) => {
+  const {
+    zunchadora_id,
+    fecha,
+    mantencion,
+    estado_componentes,
+    Limpieza,
+    funcionamiento_equipo,
+    observaciones
+  } = req.body;
+
+  if (!zunchadora_id || !fecha) {
+    return res.status(400).json({ error: 'Faltan zunchadora_id o fecha' });
+  }
+
+  db.query(
+    'SELECT * FROM mantenimiento_zunchadoras WHERE zunchadora_id = ? AND fecha = ?',
+    [zunchadora_id, fecha],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      if (results.length > 0) {
+        // Actualizar
+        db.query(
+          `UPDATE mantenimiento_zunchadoras
+           SET mantencion = ?, estado_componentes = ?, Limpieza = ?, funcionamiento_equipo = ?, observaciones = ?
+           WHERE zunchadora_id = ? AND fecha = ?`,
+          [mantencion, estado_componentes, Limpieza, funcionamiento_equipo, observaciones, zunchadora_id, fecha],
+          err => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ message: 'Mantención actualizada' });
+          }
+        );
+      } else {
+        // Insertar
+        db.query(
+          `INSERT INTO mantenimiento_zunchadoras
+           (zunchadora_id, fecha, mantencion, estado_componentes, Limpieza, funcionamiento_equipo, observaciones)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [zunchadora_id, fecha, mantencion, estado_componentes, Limpieza, funcionamiento_equipo, observaciones],
+          err => {
+            if (err) return res.status(500).json({ error: err.message });
+            res.json({ message: 'Mantención guardada' });
+          }
+        );
+      }
+    }
+  );
+});
+
+// Eliminar mantención de zunchadora
+app.delete('/mantenimientozunchadora/:id', (req, res) => {
+  const { id } = req.params;
+  db.query('DELETE FROM mantenimiento_zunchadoras WHERE id = ?', [id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Mantención no encontrada' });
+    res.json({ message: 'Mantención eliminada' });
+  });
+});
+
+// Obtener fechas de mantenciones de zunchadora
+app.get('/mantenimientos-fechas-zunchadora', (req, res) => {
+  const { zunchadora_id } = req.query;
+  if (!zunchadora_id) return res.status(400).json({ error: 'ID de zunchadora requerido' });
+
+  db.query(
+    'SELECT fecha FROM mantenimiento_zunchadoras WHERE zunchadora_id = ?',
+    [zunchadora_id],
+    (err, results) => {
+      if (err) return res.status(500).json({ error: 'Error al obtener fechas' });
+      const fechas = results.map(row => new Date(row.fecha).toISOString().split('T')[0]);
+      res.json({ fechas });
+    }
+  );
+});
+
 
 // Servidor escuchando
 const PORT = 3000;
