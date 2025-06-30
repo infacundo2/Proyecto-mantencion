@@ -27,9 +27,7 @@ import { fechaZunchadora,
          eliminarMantencionZunchadoraBtn,
          cargarEstadoZunchadora} from './mantenimiento_zunchadoras.js';
 import { zunchadoraSelect } from './zunchadoras.js'; 
-import flatpickr from 'flatpickr';
-import { es } from 'flatpickr/dist/l10n/es.js'; // Importar idioma español para flatpickr
-import 'flatpickr/dist/flatpickr.css'; // Importar estilos de flatpickr
+
 
 
 // Importar idioma español para flatpickr
