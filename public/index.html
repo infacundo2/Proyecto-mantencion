@@ -103,6 +103,48 @@
 
   <button id="eliminarMantencionSemanalBtn" style="margin-left:10px; color:red; display:none;">Eliminar Mantención</button>
 
+  <hr />
+
+  <h1>Mantención Zunchadoras</h1>
+
+  <input type="text" id="nuevaZunchadora" placeholder="Número de zunchadora" />
+  <button id="crearZunchadoraBtn">Crear Zunchadora</button>
+  <button id="eliminarZunchadoraBtn">Eliminar Zunchadora</button>
+
+  <label for="zunchadoraSelect">Zunchadora:</label>
+  <select id="zunchadoraSelect"></select><br /><br />
+
+  <label for="fechaZunchadora">Fecha:</label>
+  <input type="date" id="fechaZunchadora" /><br /><br />
+
+  <table>
+    <thead>
+      <tr>
+        <th>Mantención</th>
+        <th>Estado componentes</th>
+        <th>Limpieza</th>
+        <th>Funcionamiento del equipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" id="mantencionZunChk" /></td>
+        <td><input type="checkbox" id="estadoComponentesZunChk" /></td>
+        <td><input type="checkbox" id="limpiezaZunChk" /></td>
+        <td><input type="checkbox" id="funcionamientoZunChk" /></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <label for="observacionesZunchadora">Observaciones:</label><br />
+  <textarea id="observacionesZunchadora" rows="4" cols="50"></textarea><br />
+
+  <button id="guardarMantencionZunchadoraBtn">Guardar Mantención</button>
+  <button id="eliminarMantencionZunchadoraBtn" style="margin-left:10px; color:red; display:none;">
+    Eliminar Mantención
+  </button>
+
+
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
   <script type="module" src="script.js"></script>

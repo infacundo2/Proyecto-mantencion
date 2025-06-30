@@ -1,6 +1,33 @@
-import { equipoSelect, nuevoNombre, nuevoDestinado, crearEquipoBtn, eliminarEquipoBtn, cargarEquipos } from './equipo.js';
-import { fechaInput, limpiezaChk, conexionesChk, verificacionChk, observaciones, eliminarMantencionBtn, cargarEstado } from './mantenimiento.js';
-import { mantencionChk, estadoComponentesChk, cambioPastaChk, funcionamientoChk, observacionesTrimestral, eliminarMantencionSemanalBtn, cargarEstadoSemanal} from './mantenimiento_semanal.js';
+import { equipoSelect, 
+         nuevoNombre, 
+         nuevoDestinado, 
+         crearEquipoBtn, 
+         eliminarEquipoBtn, 
+         cargarEquipos } from './equipo.js';
+import { fechaInput, 
+         limpiezaChk, 
+         conexionesChk, 
+         verificacionChk, 
+         observaciones, 
+         eliminarMantencionBtn, 
+         cargarEstado } from './mantenimiento.js';
+import { mantencionChk, 
+         estadoComponentesChk, 
+         cambioPastaChk, 
+         funcionamientoChk, 
+         observacionesTrimestral, 
+         eliminarMantencionSemanalBtn, 
+         cargarEstadoSemanal} from './mantenimiento_semanal.js';
+import { zunchadoraSelect, 
+         fechaZunchadora, 
+         mantencionZunChk, 
+         estadoComponentesZunChk, 
+         limpiezaZunChk, 
+         funcionamientoZunChk,
+         observacionesZunchadora, 
+         eliminarMantencionZunchadoraBtn,
+         cargarEstadoZunchadora,
+         actualizarFechasZunchadoras} from './mantenimiento_zunchadoras.js';
 
 
 // Importar idioma español para flatpickr
@@ -29,20 +56,6 @@ const picker = flatpickr(fechaInput, {
 });
 
 
-// Función para actualizar el calendario con fechas de mantenciones
-// export async function actualizarFechasCalendario() {
-//   const equipoId = equipoSelect.value;
-//   if (!equipoId) return;
-
-//   try {
-//     const res = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-//     const data = await res.json();
-//     fechasMantenimiento = data.fechas || [];
-//     picker.redraw(); // Redibuja para marcar las fechas
-//   } catch (err) {
-//     console.error('Error cargando fechas:', err);
-//   }
-// }
 export async function actualizarFechasCalendario() {
   const equipoId = equipoSelect.value;
   if (!equipoId) return;
@@ -67,6 +80,33 @@ export async function actualizarFechasCalendario() {
   }
 }
 
+export async function actualizarFechasZunchadoras() {
+  const zunchadoraId = zunchadoraSelect.value;
+  if (!zunchadoraId) return;
+
+  try {
+    const res = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+    const data = await res.json();
+    const fechas = data.fechas || [];
+
+    flatpickr("#fechaZunchadora", {
+      locale: 'es',
+      dateFormat: 'Y-m-d',
+      altInput: true,
+      altFormat: 'F j, Y',
+      defaultDate: new Date(),
+      onDayCreate: function (_, __, ___, dayElem) {
+        const date = dayElem.dateObj.toISOString().split('T')[0];
+        if (fechas.includes(date)) {
+          dayElem.classList.add('fecha-con-marca');
+        }
+      },
+      onChange: cargarEstadoZunchadora
+    });
+  } catch (err) {
+    console.error('Error al cargar fechas de zunchadoras:', err);
+  }
+}
 
 // Guardar mantención
 guardarBtn.addEventListener('click', async () => {
@@ -136,6 +176,40 @@ document.getElementById('guardarMantencionSemanalBtn')?.addEventListener('click'
   }
 });
 
+// Guardad mantencion zunchadoras
+document.getElementById('guardarMantencionZunchadoraBtn')?.addEventListener('click', async () => {
+  const zunchadora_id = zunchadoraSelect.value;
+  const fecha = fechaZunchadora.value;
+
+  if (!zunchadora_id || !fecha) {
+    alert('Por favor selecciona una zunchadora y una fecha válida.');
+    return;
+  }
+
+  const body = {
+    zunchadora_id: parseInt(zunchadora_id),
+    fecha,
+    mantencion: mantencionZunChk.checked,
+    estado_componentes: estadoComponentesZunChk.checked,
+    Limpieza: limpiezaZunChk.checked,
+    funcionamiento_equipo: funcionamientoZunChk.checked,
+    observaciones: observacionesZunchadora.value.trim()
+  };
+
+  try {
+    const res = await fetch('/estado_zunchadora', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    const data = await res.json();
+    alert(data.message);
+    cargarEstadoZunchadora();
+  } catch (err) {
+    alert('Error al guardar: ' + err.message);
+  }
+});
 
 // Crear nuevo equipo
 crearEquipoBtn.addEventListener('click', async () => {
@@ -161,6 +235,26 @@ crearEquipoBtn.addEventListener('click', async () => {
     nuevoDestinado.value = '';
     await cargarEquipos();
     actualizarFechasCalendario();
+  }
+});
+
+crearZunchadoraBtn.addEventListener('click', async () => {
+  const numero = nuevaZunchadora.value.trim();
+  if (!numero) return alert('Ingresa el número de la zunchadora');
+
+  const res = await fetch('/zunchadoras', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ numero_zunchadora: numero })
+  });
+
+  const data = await res.json();
+  if (data.error) {
+    alert('Error: ' + data.error);
+  } else {
+    alert('Zunchadora creada');
+    nuevaZunchadora.value = '';
+    await cargarZunchadoras();
   }
 });
 
@@ -222,6 +316,43 @@ eliminarMantencionSemanalBtn.addEventListener('click', async () => {
   }
 });
 
+
+//Eliminar zunchadoras
+eliminarZunchadoraBtn.addEventListener('click', async () => {
+  if (!confirm('¿Eliminar esta zunchadora y su historial?')) return;
+  const id = zunchadoraSelect.value;
+  const res = await fetch(`/zunchadoras/${id}`, { method: 'DELETE' });
+  const data = await res.json();
+  if (data.error) {
+    alert('Error: ' + data.error);
+  } else {
+    alert(data.message);
+    await cargarZunchadoras();
+  }
+});
+
+// Eliminar mantencion zunchadora
+eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
+  if (!confirm('¿Quieres eliminar esta mantención?')) return;
+
+  const id = eliminarMantencionZunchadoraBtn.dataset.mantencionId;
+  if (!id) return;
+
+  const res = await fetch(`/mantenimientozunchadora/${id}`, { method: 'DELETE' });
+  const data = await res.json();
+  if (data.error) {
+    alert('Error: ' + data.error);
+  } else {
+    alert(data.message);
+    cargarEstadoZunchadora();
+  }
+});
+
+// eventos de zunchadora
+zunchadoraSelect?.addEventListener('change', () => {
+  cargarEstadoZunchadora();
+  actualizarFechasZunchadoras();
+});
 
 // Eventos al cambiar selección
 equipoSelect.addEventListener('change', () => {
