@@ -6,8 +6,8 @@ export const mantencionChk = document.getElementById('mantencionZunChk');
 export const estadoComponentesChk = document.getElementById('estadoComponentesZunChk');
 export const limpiezaChk = document.getElementById('limpiezaZunChk');
 export const funcionamientoChk = document.getElementById('funcionamientoZunChk');
-export const observacionesInput = document.getElementById('observacionesZunchadora');
-export const eliminarBtn = document.getElementById('eliminarMantencionZunchadoraBtn');
+export const observacionesZunchadora = document.getElementById('observacionesZunchadora');
+export const eliminarMantencionZunchadoraBtn = document.getElementById('eliminarMantencionZunchadoraBtn');
 
 export async function cargarEstadoZunchadora() {
   const zunchadora_id = zunchadoraSelect.value;
@@ -18,8 +18,8 @@ export async function cargarEstadoZunchadora() {
     estadoComponentesChk.checked = false;
     limpiezaChk.checked = false;
     funcionamientoChk.checked = false;
-    observacionesInput.value = '';
-    eliminarBtn.style.display = 'none';
+    observacionesZunchadora.value = '';
+    eliminarMantencionZunchadoraBtn.style.display = 'none';
     return;
   }
 
@@ -31,16 +31,44 @@ export async function cargarEstadoZunchadora() {
     estadoComponentesChk.checked = !!estado.estado_componentes;
     limpiezaChk.checked = !!estado.Limpieza;
     funcionamientoChk.checked = !!estado.funcionamiento_equipo;
-    observacionesInput.value = estado.observaciones || '';
-    eliminarBtn.style.display = 'inline';
-    eliminarBtn.dataset.mantencionId = estado.id;
+    observacionesZunchadora.value = estado.observaciones || '';
+    eliminarMantencionZunchadoraBtn.style.display = 'inline';
+    eliminarMantencionZunchadoraBtn.dataset.mantencionId = estado.id;
   } else {
     mantencionChk.checked = false;
     estadoComponentesChk.checked = false;
     limpiezaChk.checked = false;
     funcionamientoChk.checked = false;
-    observacionesInput.value = '';
-    eliminarBtn.style.display = 'none';
-    eliminarBtn.dataset.mantencionId = '';
+    observacionesZunchadora.value = '';
+    eliminarMantencionZunchadoraBtn.style.display = 'none';
+    eliminarMantencionZunchadoraBtn.dataset.mantencionId = '';
   }
 }
+
+export async function actualizarFechasZunchadoras() {
+    const zunchadoraId = zunchadoraSelect.value;
+    if (!zunchadoraId) return;
+  
+    try {
+      const res = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+      const data = await res.json();
+      const fechas = data.fechas || [];
+  
+      flatpickr("#fechaZunchadora", {
+        locale: 'es',
+        dateFormat: 'Y-m-d',
+        altInput: true,
+        altFormat: 'F j, Y',
+        defaultDate: new Date(),
+        onDayCreate: function (_, __, ___, dayElem) {
+          const date = dayElem.dateObj.toISOString().split('T')[0];
+          if (fechas.includes(date)) {
+            dayElem.classList.add('fecha-con-marca');
+          }
+        },
+        onChange: cargarEstadoZunchadora
+      });
+    } catch (err) {
+      console.error('Error al cargar fechas de zunchadoras:', err);
+    }
+  }
