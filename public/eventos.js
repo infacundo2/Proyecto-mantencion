@@ -76,6 +76,40 @@ const pickerZunchadora = flatpickr(fechaZunchadoraInput, {
   }
 });
 
+export async function actualizarFechasCalendario() {
+  const equipoId = equipoSelect.value;
+  if (!equipoId) return;
+
+  try {
+    const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
+    const dataMant = await resMant.json();
+    const fechasMant = dataMant.fechas || [];
+
+    const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
+    const dataMantSem = await resMantSem.json();
+    const fechasMantSem = dataMantSem.fechas || [];
+
+    fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
+    picker.redraw();
+  } catch (err) {
+    console.error('Error cargando fechas de equipos:', err);
+  }
+}
+
+export async function actualizarFechasCalendarioZunchadoras() {
+  const zunchadoraId = zunchadoraSelect?.value;
+  if (!zunchadoraId) return;
+
+  try {
+    const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+    const dataZunch = await resZunch.json();
+    fechasMantenimiento = dataZunch.fechas || [];
+    pickerZunchadora.redraw();
+  } catch (err) {
+    console.error('Error cargando fechas de zunchadoras:', err);
+  }
+}
+
 
 // export async function actualizarFechasCalendario() {
 //   const equipoId = equipoSelect.value;
@@ -102,44 +136,44 @@ const pickerZunchadora = flatpickr(fechaZunchadoraInput, {
 //   }
 // }
 
-export async function actualizarFechasCalendario() {
-  const equipoId = equipoSelect.value;
-  const zunchadoraId = zunchadoraSelect?.value; // Solo si tienes ese elemento
+// export async function actualizarFechasCalendario() {
+//   const equipoId = equipoSelect.value;
+//   const zunchadoraId = zunchadoraSelect?.value; // Solo si tienes ese elemento
 
-  if (!equipoId && !zunchadoraId) return;
+//   if (!equipoId && !zunchadoraId) return;
 
-  try {
-    let fechasTotales = [];
+//   try {
+//     let fechasTotales = [];
 
-    if (equipoId) {
-      const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-      const dataMant = await resMant.json();
-      const fechasMant = dataMant.fechas || [];
+//     if (equipoId) {
+//       const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
+//       const dataMant = await resMant.json();
+//       const fechasMant = dataMant.fechas || [];
 
-      const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
-      const dataMantSem = await resMantSem.json();
-      const fechasMantSem = dataMantSem.fechas || [];
+//       const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
+//       const dataMantSem = await resMantSem.json();
+//       const fechasMantSem = dataMantSem.fechas || [];
 
-      fechasTotales = fechasTotales.concat(fechasMant, fechasMantSem);
-    }
+//       fechasTotales = fechasTotales.concat(fechasMant, fechasMantSem);
+//     }
 
-    if (zunchadoraId) {
-      const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
-      const dataZunch = await resZunch.json();
-      const fechasZunch = dataZunch.fechas || [];
+//     if (zunchadoraId) {
+//       const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+//       const dataZunch = await resZunch.json();
+//       const fechasZunch = dataZunch.fechas || [];
 
-      fechasTotales = fechasTotales.concat(fechasZunch);
-    }
+//       fechasTotales = fechasTotales.concat(fechasZunch);
+//     }
 
-    // Quitar duplicados
-    fechasMantenimiento = [...new Set(fechasTotales)];
-    // Actualizar el calendario
-    picker.redraw();
-    pickerZunchadora.redraw();
-  } catch (err) {
-    console.error('Error cargando fechas:', err);
-  }
-}
+//     // Quitar duplicados
+//     fechasMantenimiento = [...new Set(fechasTotales)];
+//     // Actualizar el calendario
+//     picker.redraw();
+//     pickerZunchadora.redraw();
+//   } catch (err) {
+//     console.error('Error cargando fechas:', err);
+//   }
+// }
 
 
 // Guardar mantención
@@ -240,7 +274,7 @@ document.getElementById('guardarMantencionZunchadoraBtn')?.addEventListener('cli
     const data = await res.json();
     alert(data.message);
     cargarEstadoZunchadora();
-    actualizarFechasCalendario();
+    actualizarFechasCalendarioZunchadoras();
   } catch (err) {
     alert('Error al guardar: ' + err.message);
   }
@@ -382,14 +416,14 @@ eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
   } else {
     alert(data.message);
     cargarEstadoZunchadora();
-    actualizarFechasCalendario();
+    actualizarFechasCalendarioZunchadoras();
   }
 });
 
 // eventos de zunchadora
 zunchadoraSelect?.addEventListener('change', () => {
   cargarEstadoZunchadora();
-  actualizarFechasCalendario();
+  actualizarFechasCalendarioZunchadoras();
 }); 
 
 // Eventos al cambiar selección
@@ -409,6 +443,7 @@ fechaInput.addEventListener('change', () => {
 // Carga inicial
 cargarEquipos();
 actualizarFechasCalendario();
+actualizarFechasCalendarioZunchadoras();
 cargarZunchadoras();
 cargarEstado();
 
