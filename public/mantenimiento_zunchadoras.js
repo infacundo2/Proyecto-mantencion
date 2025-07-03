@@ -55,7 +55,7 @@ export async function actualizarFechasZunchadoras() {
   try {
     const res = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
     const data = await res.json();
-    fechasZunchadora = data.fechas || [];
+    fechaZunchadoraInput = data.fechas || [];
 
     if (pickerZunchadora) {
       pickerZunchadora.destroy(); // Elimina el anterior si ya existe
