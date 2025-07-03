@@ -326,6 +326,7 @@ eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
 
 // eventos de zunchadora
 zunchadoraSelect?.addEventListener('change', () => {
+  cargarZunchadoras();
   cargarEstadoZunchadora();
   actualizarFechasZunchadoras();
 }); 
