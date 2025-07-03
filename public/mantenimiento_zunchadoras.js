@@ -1,7 +1,7 @@
 // mantenimiento_zunchadoras.js
 import { zunchadoraSelect } from './zunchadoras.js';
 
-export const fechaZunchadora = document.getElementById('fechaZunchadora');
+export const fechaZunchadoraInput = document.getElementById('fechaZunchadora');
 export const mantencionZunChk = document.getElementById('mantencionZunChk');
 export const estadoComponentesZunChk = document.getElementById('estadoComponentesZunChk');
 export const limpiezaZunChk = document.getElementById('limpiezaZunChk');
@@ -9,9 +9,12 @@ export const funcionamientoZunChk = document.getElementById('funcionamientoZunCh
 export const observacionesZunchadora = document.getElementById('observacionesZunchadora');
 export const eliminarMantencionZunchadoraBtn = document.getElementById('eliminarMantencionZunchadoraBtn');
 
+let fechasZunchadora = [];
+let pickerZunchadora = null;
+
 export async function cargarEstadoZunchadora() {
   const zunchadora_id = zunchadoraSelect.value;
-  const fecha = fechaZunchadora.value;
+  const fecha = fechaZunchadoraInput.value;
 
   if (!zunchadora_id || !fecha) {
     mantencionZunChk.checked = false;
@@ -46,29 +49,33 @@ export async function cargarEstadoZunchadora() {
 }
 
 export async function actualizarFechasZunchadoras() {
-    const zunchadoraId = zunchadoraSelect.value;
-    if (!zunchadoraId) return;
-  
-    try {
-      const res = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
-      const data = await res.json();
-      const fechas = data.fechas || [];
-  
-      flatpickr("#fechaZunchadora", {
-        locale: 'es',
-        dateFormat: 'Y-m-d',
-        altInput: true,
-        altFormat: 'F j, Y',
-        defaultDate: new Date(),
-        onDayCreate: function (_, __, ___, dayElem) {
-          const date = dayElem.dateObj.toISOString().split('T')[0];
-          if (fechas.includes(date)) {
-            dayElem.classList.add('fecha-con-marca');
-          }
-        },
-        onChange: cargarEstadoZunchadora
-      });
-    } catch (err) {
-      console.error('Error al cargar fechas de zunchadoras:', err);
+  const zunchadoraId = zunchadoraSelect.value;
+  if (!zunchadoraId) return;
+
+  try {
+    const res = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+    const data = await res.json();
+    fechasZunchadora = data.fechas || [];
+
+    if (pickerZunchadora) {
+      pickerZunchadora.destroy(); // Elimina el anterior si ya existe
     }
+
+    pickerZunchadora = flatpickr(fechaZunchadoraInput, {
+      locale: 'es',
+      dateFormat: 'Y-m-d',
+      altInput: true,
+      altFormat: 'F j, Y',
+      defaultDate: new Date(),
+      onDayCreate: function (_, __, ___, dayElem) {
+        const date = dayElem.dateObj.toISOString().split('T')[0];
+        if (fechasZunchadora.includes(date)) {
+          dayElem.classList.add('fecha-con-marca');
+        }
+      },
+      onChange: cargarEstadoZunchadora
+    });
+  } catch (err) {
+    console.error('Error al cargar fechas de zunchadoras:', err);
   }
+}

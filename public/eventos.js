@@ -182,6 +182,7 @@ document.getElementById('guardarMantencionZunchadoraBtn')?.addEventListener('cli
     const data = await res.json();
     alert(data.message);
     cargarEstadoZunchadora();
+    actualizarFechasZunchadoras();
   } catch (err) {
     alert('Error al guardar: ' + err.message);
   }
