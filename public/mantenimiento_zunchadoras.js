@@ -47,4 +47,3 @@ export async function cargarEstadoZunchadora() {
     eliminarMantencionZunchadoraBtn.dataset.mantencionId = '';
   }
 }
-

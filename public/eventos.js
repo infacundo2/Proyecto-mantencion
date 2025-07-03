@@ -25,8 +25,7 @@ import { fechaZunchadoraInput,
          funcionamientoZunChk,
          observacionesZunchadora, 
          eliminarMantencionZunchadoraBtn,
-         cargarEstadoZunchadora,
-         actualizarFechasZunchadoras} from './mantenimiento_zunchadoras.js';
+         cargarEstadoZunchadora,} from './mantenimiento_zunchadoras.js';
 import { zunchadoraSelect, 
          cargarZunchadoras } from './zunchadoras.js'; 
 
