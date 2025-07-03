@@ -25,9 +25,9 @@ export async function cargarZunchadoras() {
       zunchadoraSelect.value = zunchadoras[0].id;
     }
 
-    console.log('Zunchadoras cargadas:', zunchadoras);
-  } catch (error) {
-    console.error('Error en cargarZunchadoras:', error);
-    alert('Error cargando zunchadoras');
-  }
+    console.log('Zunchadoras cargados:', zunchadoras);
+      } catch (error) {
+        console.error('Error en cargar Zuncahdoras', error);
+        alert('Error cargando Zcunchadoras');
+      }
 }

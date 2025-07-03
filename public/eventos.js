@@ -348,3 +348,6 @@ fechaInput.addEventListener('change', () => {
 // Carga inicial
 cargarEquipos();
 actualizarFechasCalendario();
+cargarZunchadoras();
+cargarEstado();
+
