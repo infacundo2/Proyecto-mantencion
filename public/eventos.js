@@ -76,104 +76,90 @@ const pickerZunchadora = flatpickr(fechaZunchadoraInput, {
   }
 });
 
-// export async function actualizarFechasCalendario() {
-//   const equipoId = equipoSelect.value;
-//   if (!equipoId) return;
-
-//   try {
-//     const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-//     const dataMant = await resMant.json();
-//     const fechasMant = dataMant.fechas || [];
-
-//     const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
-//     const dataMantSem = await resMantSem.json();
-//     const fechasMantSem = dataMantSem.fechas || [];
-
-//     fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
-//     picker.redraw();
-//   } catch (err) {
-//     console.error('Error cargando fechas de equipos:', err);
-//   }
-// }
-
-// export async function actualizarFechasCalendarioZunchadoras() {
-//   const zunchadoraId = zunchadoraSelect?.value;
-//   if (!zunchadoraId) return;
-
-//   try {
-//     const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
-//     const dataZunch = await resZunch.json();
-//     fechasMantenimiento = dataZunch.fechas || [];
-//     pickerZunchadora.redraw();
-//   } catch (err) {
-//     console.error('Error cargando fechas de zunchadoras:', err);
-//   }
-// }
-
-
-// export async function actualizarFechasCalendario() {
-//   const equipoId = equipoSelect.value;
-//   // const zunchadoraId = zunchadoraSelect?.value;
-//   if (!equipoId) return;
-
-//   try {
-//     // Traer fechas de mantenimiento
-//     const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-//     const dataMant = await resMant.json();
-//     const fechasMant = dataMant.fechas || [];
-
-//     // Traer fechas de mantenimiento semanal
-//     const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
-//     const dataMantSem = await resMantSem.json();
-//     const fechasMantSem = dataMantSem.fechas || [];
-
-//     // Unir fechas y eliminar duplicados
-//     fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
-
-//     picker.redraw(); // Redibuja para marcar las fechas
-//   } catch (err) {
-//     console.error('Error cargando fechas:', err);
-//   }
-// }
-
+//Actualziar FechasCalendario mantenimiento equipos
 export async function actualizarFechasCalendario() {
   const equipoId = equipoSelect.value;
-  const zunchadoraId = zunchadoraSelect?.value; // Solo si tienes ese elemento
-
-  if (!equipoId && !zunchadoraId) return;
+  if (!equipoId) return;
 
   try {
     let fechasTotales = [];
 
-    if (equipoId) {
-      const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-      const dataMant = await resMant.json();
-      const fechasMant = dataMant.fechas || [];
+    const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
+    const dataMant = await resMant.json();
+    const fechasMant = dataMant.fechas || [];
 
-      const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
-      const dataMantSem = await resMantSem.json();
-      const fechasMantSem = dataMantSem.fechas || [];
+    const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
+    const dataMantSem = await resMantSem.json();
+    const fechasMantSem = dataMantSem.fechas || [];
 
-      fechasTotales = fechasTotales.concat(fechasMant, fechasMantSem);
-    }
-
-    if (zunchadoraId) {
-      const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
-      const dataZunch = await resZunch.json();
-      const fechasZunch = dataZunch.fechas || [];
-
-      fechasTotales = fechasTotales.concat(fechasZunch);
-    }
+    fechasTotales = fechasTotales.concat(fechasMant, fechasMantSem);
 
     // Quitar duplicados
     fechasMantenimiento = [...new Set(fechasTotales)];
-    // Actualizar el calendario
+    // Actualizar calendario de equipos
     picker.redraw();
-    pickerZunchadora.redraw();
   } catch (err) {
-    console.error('Error cargando fechas:', err);
+    console.error('Error cargando fechas de equipos:', err);
   }
 }
+
+// Actualizar FechasCalendario zunchadoras
+export async function actualizarFechasZunchadora() {
+  const zunchadoraId = zunchadoraSelect?.value;
+  if (!zunchadoraId) return;
+
+  try {
+    const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+    const dataZunch = await resZunch.json();
+    const fechasZunch = dataZunch.fechas || [];
+
+    fechasMantenimiento = [...new Set(fechasZunch)];
+    // Actualizar calendario de zunchadoras
+    pickerZunchadora.redraw();
+  } catch (err) {
+    console.error('Error cargando fechas de zunchadora:', err);
+  }
+}
+
+
+// export async function actualizarFechasCalendario() {
+//   const equipoId = equipoSelect.value;
+//   const zunchadoraId = zunchadoraSelect?.value; // Solo si tienes ese elemento
+
+//   if (!equipoId && !zunchadoraId) return;
+
+//   try {
+//     let fechasTotales = [];
+
+//     if (equipoId) {
+//       const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
+//       const dataMant = await resMant.json();
+//       const fechasMant = dataMant.fechas || [];
+
+//       const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
+//       const dataMantSem = await resMantSem.json();
+//       const fechasMantSem = dataMantSem.fechas || [];
+
+//       fechasTotales = fechasTotales.concat(fechasMant, fechasMantSem);
+//     }
+
+//     if (zunchadoraId) {
+//       const resZunch = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
+//       const dataZunch = await resZunch.json();
+//       const fechasZunch = dataZunch.fechas || [];
+
+//       fechasTotales = fechasTotales.concat(fechasZunch);
+//     }
+
+//     // Quitar duplicados
+//     fechasMantenimiento = [...new Set(fechasTotales)];
+//     // Actualizar el calendario
+//     picker.redraw();
+//     pickerZunchadora.redraw();
+//   } catch (err) {
+//     console.error('Error cargando fechas:', err);
+//   }
+// }
 
 
 // Guardar mantención
