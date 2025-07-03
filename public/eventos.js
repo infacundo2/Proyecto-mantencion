@@ -260,7 +260,7 @@ document.getElementById('guardarMantencionZunchadoraBtn')?.addEventListener('cli
     const data = await res.json();
     alert(data.message);
     cargarEstadoZunchadora();
-    actualizarFechasCalendario();
+    actualizarFechasZunchadora();
   } catch (err) {
     alert('Error al guardar: ' + err.message);
   }
@@ -402,14 +402,14 @@ eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
   } else {
     alert(data.message);
     cargarEstadoZunchadora();
-    actualizarFechasCalendario();
+    actualizarFechasZunchadora();
   }
 });
 
 // eventos de zunchadora
 zunchadoraSelect?.addEventListener('change', () => {
   cargarEstadoZunchadora();
-  actualizarFechasCalendario();
+  actualizarFechasZunchadora();
 }); 
 
 // Eventos al cambiar selección
@@ -425,10 +425,15 @@ fechaInput.addEventListener('change', () => {
   cargarEstadoSemanal();
 });
 
+fechaZunchadoraInput.addEventListener('change', () => {
+  cargarEstadoZunchadora();
+  actualizarFechasZunchadora();
+});
 
 // Carga inicial
 cargarEquipos();
 actualizarFechasCalendario();
+actualizarFechasZunchadora();
 cargarZunchadoras();
 cargarEstado();
 
