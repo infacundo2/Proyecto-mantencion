@@ -57,6 +57,25 @@ const picker = flatpickr(fechaInput, {
   }
 });
 
+const pickerZunchadora = flatpickr(fechaZunchadoraInput, {
+  locale: es,
+  dateFormat: 'Y-m-d',
+  altInput: true,
+  altFormat: 'F j, Y',
+  allowInput: true,
+  monthSelectorType: 'dropdown',
+  yearSelectorType: 'dropdown',
+  onDayCreate: function(_, __, ___, dayElem) {
+    const date = dayElem.dateObj.toISOString().split('T')[0];
+    if (fechasMantenimiento.includes(date)) {
+      dayElem.classList.add('fecha-con-marca');
+    }
+  },
+  onChange: function() {
+    cargarEstadoZunchadora();
+  }
+});
+
 
 // export async function actualizarFechasCalendario() {
 //   const equipoId = equipoSelect.value;
@@ -114,8 +133,9 @@ export async function actualizarFechasCalendario() {
 
     // Quitar duplicados
     fechasMantenimiento = [...new Set(fechasTotales)];
-
-    picker.redraw(); // Vuelve a dibujar con las nuevas marcas
+    // Actualizar el calendario
+    picker.redraw();
+    pickerZunchadora.redraw();
   } catch (err) {
     console.error('Error cargando fechas:', err);
   }
@@ -270,6 +290,7 @@ crearZunchadoraBtn.addEventListener('click', async () => {
     alert('Zunchadora creada');
     nuevaZunchadora.value = '';
     await cargarZunchadoras();
+    
   }
 });
 
@@ -343,6 +364,7 @@ eliminarZunchadoraBtn.addEventListener('click', async () => {
   } else {
     alert(data.message);
     await cargarZunchadoras();
+    actualizarFechasCalendario();
   }
 });
 
@@ -360,6 +382,7 @@ eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
   } else {
     alert(data.message);
     cargarEstadoZunchadora();
+    actualizarFechasCalendario();
   }
 });
 
