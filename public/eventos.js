@@ -220,7 +220,7 @@ document.getElementById('guardarMantencionZunchadoraBtn')?.addEventListener('cli
     const data = await res.json();
     alert(data.message);
     cargarEstadoZunchadora();
-    actualizarFechasZunchadoras();
+    actualizarFechasCalendario();
   } catch (err) {
     alert('Error al guardar: ' + err.message);
   }
@@ -366,7 +366,7 @@ eliminarMantencionZunchadoraBtn?.addEventListener('click', async () => {
 // eventos de zunchadora
 zunchadoraSelect?.addEventListener('change', () => {
   cargarEstadoZunchadora();
-  actualizarFechasZunchadoras();
+  actualizarFechasCalendario();
 }); 
 
 // Eventos al cambiar selección
