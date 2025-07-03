@@ -18,7 +18,7 @@ import { mantencionChk,
          observacionesTrimestral, 
          eliminarMantencionSemanalBtn, 
          cargarEstadoSemanal} from './mantenimiento_semanal.js';
-import { fechaZunchadora, 
+import { fechaZunchadoraInput, 
          mantencionZunChk, 
          estadoComponentesZunChk, 
          limpiezaZunChk, 
@@ -155,7 +155,7 @@ document.getElementById('guardarMantencionSemanalBtn')?.addEventListener('click'
 // Guardad mantencion zunchadoras
 document.getElementById('guardarMantencionZunchadoraBtn')?.addEventListener('click', async () => {
   const zunchadora_id = zunchadoraSelect.value;
-  const fecha = fechaZunchadora.value;
+  const fecha = fechaZunchadoraInput.value;
 
   if (!zunchadora_id || !fecha) {
     alert('Por favor selecciona una zunchadora y una fecha válida.');
