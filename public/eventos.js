@@ -76,25 +76,25 @@ const pickerZunchadora = flatpickr(fechaZunchadoraInput, {
   }
 });
 
-export async function actualizarFechasCalendario() {
-  const equipoId = equipoSelect.value;
-  if (!equipoId) return;
+// export async function actualizarFechasCalendario() {
+//   const equipoId = equipoSelect.value;
+//   if (!equipoId) return;
 
-  try {
-    const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-    const dataMant = await resMant.json();
-    const fechasMant = dataMant.fechas || [];
+//   try {
+//     const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
+//     const dataMant = await resMant.json();
+//     const fechasMant = dataMant.fechas || [];
 
-    const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
-    const dataMantSem = await resMantSem.json();
-    const fechasMantSem = dataMantSem.fechas || [];
+//     const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
+//     const dataMantSem = await resMantSem.json();
+//     const fechasMantSem = dataMantSem.fechas || [];
 
-    fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
-    picker.redraw();
-  } catch (err) {
-    console.error('Error cargando fechas de equipos:', err);
-  }
-}
+//     fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
+//     picker.redraw();
+//   } catch (err) {
+//     console.error('Error cargando fechas de equipos:', err);
+//   }
+// }
 
 export async function actualizarFechasCalendarioZunchadoras() {
   const zunchadoraId = zunchadoraSelect?.value;
@@ -111,30 +111,30 @@ export async function actualizarFechasCalendarioZunchadoras() {
 }
 
 
-// export async function actualizarFechasCalendario() {
-//   const equipoId = equipoSelect.value;
-//   const zunchadoraId = zunchadoraSelect?.value;
-//   if (!equipoId) return;
+export async function actualizarFechasCalendario() {
+  const equipoId = equipoSelect.value;
+  // const zunchadoraId = zunchadoraSelect?.value;
+  if (!equipoId) return;
 
-//   try {
-//     // Traer fechas de mantenimiento
-//     const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
-//     const dataMant = await resMant.json();
-//     const fechasMant = dataMant.fechas || [];
+  try {
+    // Traer fechas de mantenimiento
+    const resMant = await fetch(`/mantenimientos-fechas?equipo_id=${equipoId}`);
+    const dataMant = await resMant.json();
+    const fechasMant = dataMant.fechas || [];
 
-//     // Traer fechas de mantenimiento semanal
-//     const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
-//     const dataMantSem = await resMantSem.json();
-//     const fechasMantSem = dataMantSem.fechas || [];
+    // Traer fechas de mantenimiento semanal
+    const resMantSem = await fetch(`/mantenimientos-fechas-semanal?equipo_id=${equipoId}`);
+    const dataMantSem = await resMantSem.json();
+    const fechasMantSem = dataMantSem.fechas || [];
 
-//     // Unir fechas y eliminar duplicados
-//     fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
+    // Unir fechas y eliminar duplicados
+    fechasMantenimiento = [...new Set([...fechasMant, ...fechasMantSem])];
 
-//     picker.redraw(); // Redibuja para marcar las fechas
-//   } catch (err) {
-//     console.error('Error cargando fechas:', err);
-//   }
-// }
+    picker.redraw(); // Redibuja para marcar las fechas
+  } catch (err) {
+    console.error('Error cargando fechas:', err);
+  }
+}
 
 // export async function actualizarFechasCalendario() {
 //   const equipoId = equipoSelect.value;
