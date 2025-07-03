@@ -48,34 +48,3 @@ export async function cargarEstadoZunchadora() {
   }
 }
 
-export async function actualizarFechasZunchadoras() {
-  const zunchadoraId = zunchadoraSelect.value;
-  if (!zunchadoraId) return;
-
-  try {
-    const res = await fetch(`/mantenimientos-fechas-zunchadora?zunchadora_id=${zunchadoraId}`);
-    const data = await res.json();
-    fechaZunchadoraInput = data.fechas || [];
-
-    if (pickerZunchadora) {
-      pickerZunchadora.destroy(); // Elimina el anterior si ya existe
-    }
-
-    pickerZunchadora = flatpickr(fechaZunchadoraInput, {
-      locale: 'es',
-      dateFormat: 'Y-m-d',
-      altInput: true,
-      altFormat: 'F j, Y',
-      defaultDate: new Date(),
-      onDayCreate: function (_, __, ___, dayElem) {
-        const date = dayElem.dateObj.toISOString().split('T')[0];
-        if (fechasZunchadora.includes(date)) {
-          dayElem.classList.add('fecha-con-marca');
-        }
-      },
-      onChange: cargarEstadoZunchadora
-    });
-  } catch (err) {
-    console.error('Error al cargar fechas de zunchadoras:', err);
-  }
-}
