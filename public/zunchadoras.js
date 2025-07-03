@@ -17,7 +17,7 @@ export async function cargarZunchadoras() {
     zunchadoras.forEach(z => {
       const option = document.createElement('option');
       option.value = z.id;
-      option.textContent = `Zunchadora ${z.numero_zunchadora}`;
+      option.textContent = `${z.numero_zunchadora}`;
       zunchadoraSelect.appendChild(option);
     });
 
